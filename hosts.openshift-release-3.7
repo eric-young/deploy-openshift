@@ -1,0 +1,47 @@
+# This is an example of a bring your own (byo) host inventory
+
+# Create an OSEv3 group that contains the masters and nodes groups
+[OSEv3:children]
+masters
+nodes
+etcd
+
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+ansible_ssh_user=root
+
+
+# Specify the deployment type. Valid values are origin and openshift-enterprise.
+openshift_deployment_type=origin
+
+# Specify the generic release of OpenShift to install. This is used mainly just during installation, after which we
+# rely on the version running on the first master. Works best for containerized installs where we can usually
+# use this to lookup the latest exact version of the container images, which is the tag actually used to configure
+# the cluster. For RPM installations we just verify the version detected in your configured repos matches this
+# release.
+# openshift_release=v3.7
+openshift_disable_check=memory_availability
+openshift_pkg_version=-3.7.1-2.el7
+
+
+# Enable service catalog
+openshift_enable_service_catalog=true
+
+# Enable template service broker (requires service catalog to be enabled, above)
+template_service_broker_install=false
+
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+
+# host group for masters
+[masters]
+NODE0
+
+[etcd]
+NODE0
+
+[nodes]
+NODE0 openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
+#NODE1 openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
+#NODE2 openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
+#NODE3 openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
+#NODE4 openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
