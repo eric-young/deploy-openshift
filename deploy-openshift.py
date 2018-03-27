@@ -234,7 +234,7 @@ class OpenshiftDeployer:
         self.setup_all_nodes(self.args)
         self.put_files(self.args.IP[0])
         self.setup_master(self.args.IP[0], self.args)
-        if not args.preponly:
+        if not self.args.preponly:
             self.post_setup(self.args)
             self.get_files(self.args.IP[0])
 
