@@ -177,11 +177,10 @@ class OpenshiftDeployer:
 
         if not args.preponly:
             self.node_execute_command(ipaddr,
-                                      "cd /git/openshift-ansible && ansible-playbook -vv -i /tmp/hosts.openshift playbooks/byo/config.yml | tee /tmp/ansible.log")
+                                      "cd /git/openshift-ansible && ansible-playbook -vv -i /tmp/hosts.openshift playbooks/byo/config.yml")
             self.node_execute_command(ipaddr, "htpasswd -b -c /etc/origin/master/htpasswd admin secret")
             self.node_execute_command(ipaddr, "htpasswd -b /etc/origin/master/htpasswd user secret")
             self.node_execute_command(ipaddr, "oc get nodes")
-            self.get_files(ipaddr)
         else:
             print("To setup Openshift, log onto {} as root and run:".format(args.IP[0]))
             print("  \"cd /git/openshift-ansible && ansible-playbook -i /tmp/hosts.openshift playbooks/byo/config.yml\"")
@@ -219,7 +218,7 @@ class OpenshiftDeployer:
 
     def post_setup(self, args):
         """
-        Perform any post deploypement setup
+        Perform any post deployment setup
 
 
         """
@@ -235,7 +234,9 @@ class OpenshiftDeployer:
         self.setup_all_nodes(self.args)
         self.put_files(self.args.IP[0])
         self.setup_master(self.args.IP[0], self.args)
-        self.post_setup(self.args)
+        if not args.preponly:
+            self.post_setup(self.args)
+            self.get_files(self.args.IP[0])
 
 
 # Start program
