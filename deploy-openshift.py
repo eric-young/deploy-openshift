@@ -143,6 +143,7 @@ class OpenshiftDeployer:
         _commands.append(self.centos_or_redhat_only_command("yum install -y {}".format(prereqs)))
         _commands.append("systemctl enable docker")
         _commands.append("systemctl start docker")
+        _commands.append("mkdir -p /usr/libexec/kubernetes/kubelet-plugins/volume/exec/dell~scaleio/")
 
         for ipaddr in args.IP:
             self.node_execute_multiple(ipaddr, _commands)
