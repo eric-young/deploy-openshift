@@ -208,7 +208,7 @@ class OpenshiftDeployer:
         self.show_step('Getting files')
         ssh = self.connect_to_host(ipaddr)
 
-        files = ['/etc/origin/master/admin.kubeconfig', '/tmp/hosts.openshift']
+        files = ['/tmp/hosts.openshift']
         for filename in files:
             basename=os.path.basename(filename)
             target='{}/{}'.format(self.save_dir, basename)
